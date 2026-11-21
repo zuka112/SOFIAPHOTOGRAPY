@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOFIA PHOTO — Studio Photography</title>
+<meta name="description" content="Sofia Photo — სტუდიური ფოტოგრაფია. დამუშავებული, ორიგინალი და შავ-თეთრი ფოტოები.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Noto+Sans+Georgian:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f2; --ink:#141414; --muted:#8a8580; --line:#e3dfd9;
+    --serif:"Cormorant Garamond",Georgia,serif;
+    --sans:"Noto Sans Georgian","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+
+  header{position:sticky;top:0;z-index:10;background:rgba(247,245,242,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .bar{max-width:1500px;margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .logo{font-family:var(--serif);font-size:28px;font-weight:300;letter-spacing:.32em;text-transform:uppercase}
+  .ig{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+  .ig:hover{color:var(--ink)}
+
+  .hero{max-width:1500px;margin:0 auto;padding:90px 32px 50px;text-align:center}
+  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(40px,7vw,96px);letter-spacing:.08em;line-height:1}
+  .hero p{margin-top:18px;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+
+  nav.tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 34px;padding:10px 32px 46px}
+  nav.tabs button{background:none;border:0;cursor:pointer;font:inherit;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:1px solid transparent;transition:.2s}
+  nav.tabs button:hover{color:var(--ink)}
+  nav.tabs button.active{color:var(--ink);border-bottom-color:var(--ink)}
+  nav.tabs .count{font-size:10px;margin-left:6px;vertical-align:super}
+
+  .grid{max-width:1500px;margin:0 auto;padding:0 32px 100px;columns:3 340px;column-gap:18px}
+  .item{break-inside:avoid;margin-bottom:18px;cursor:zoom-in;position:relative;overflow:hidden;background:#ebe7e1}
+  .item img{display:block;width:100%;height:auto;transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .6s;opacity:0}
+  .item img.loaded{opacity:1}
+  .item:hover img{transform:scale(1.025)}
+  .item .tag{position:absolute;left:12px;bottom:10px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#fff;opacity:0;transition:opacity .3s;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+  .item:hover .tag{opacity:1}
+
+  .empty{text-align:center;color:var(--muted);font-size:14px;line-height:1.9;padding:40px 32px 120px;display:none}
+
+  footer{border-top:1px solid var(--line);padding:36px 32px;text-align:center;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+  /* lightbox */
+  .lb{position:fixed;inset:0;background:rgba(12,12,12,.96);z-index:50;display:none;align-items:center;justify-content:center}
+  .lb.open{display:flex}
+  .lb img{max-width:92vw;max-height:88vh;object-fit:contain;user-select:none}
+  .lb button{position:absolute;background:none;border:0;color:#fff;cursor:pointer;font-family:var(--serif);font-weight:300;opacity:.7;transition:opacity .2s;padding:20px}
+  .lb button:hover{opacity:1}
+  .lb .close{top:10px;right:16px;font-size:40px}
+  .lb .prev{left:10px;top:50%;transform:translateY(-50%);font-size:56px}
+  .lb .next{right:10px;top:50%;transform:translateY(-50%);font-size:56px}
+  .lb .info{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#bbb;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+
+  @media (max-width:640px){
+    .bar{padding:16px 18px}.logo{font-size:20px}
+    .hero{padding:56px 18px 34px}
+    nav.tabs{gap:4px 20px;padding-bottom:30px}
+    .grid{padding:0 10px 70px;column-gap:10px;columns:2 150px}
+    .item{margin-bottom:10px}
+    .lb .prev,.lb .next{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="logo" href="#">Sofia&nbsp;Photo</a>
+    <a class="ig" href="https://instagram.com/sofiaphotographer" target="_blank" rel="noopener">Instagram ↗</a>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Sofia Photo</h1>
+  <p>სტუდიური ფოტოგრაფია · Studio Photography</p>
+</section>
+
+<nav class="tabs" id="tabs"></nav>
+<main class="grid" id="grid"></main>
+<div class="empty" id="empty"></div>
+
+<footer>© <span id="year"></span> Sofia Photo · sofiaphoto.com</footer>
+
+<div class="lb" id="lb">
+  <button class="close" aria-label="დახურვა">×</button>
+  <button class="prev" aria-label="წინა">‹</button>
+  <img id="lbImg" alt="">
+  <button class="next" aria-label="შემდეგი">›</button>
+  <div class="info" id="lbInfo"></div>
+</div>
+
+<script>
+/* ================= პარამეტრები ================= */
+const CATEGORIES = [
+  { id:"edited",   ka:"დამუშავებული", en:"Edited"   },
+  { id:"original", ka:"ორიგინალი",    en:"Original" },
+  { id:"bw",       ka:"შავ-თეთრი",    en:"B&W"      },
+];
+/* ================================================ */
+
+let photos = [], current = "all", view = [], idx = 0;
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const enc = p => p.split("/").map(encodeURIComponent).join("/");
+
+// photos.json ავტომატურად იქმნება GitHub-ზე ყოველი ატვირთვისას
+async function init(){
+  try{
+    const r = await fetch("photos.json", {cache:"no-cache"});
+    if(r.ok) photos = (await r.json()).map(p => ({...p, src:enc(p.src), thumb:enc(p.thumb)}));
+  }catch(e){}
+  renderTabs(); render();
+}
+
+function renderTabs(){
+  const nav = document.getElementById("tabs");
+  const items = [{id:"all", ka:"ყველა"}, ...CATEGORIES];
+  nav.innerHTML = items.map(c => {
+    const n = c.id === "all" ? photos.length : photos.filter(p => p.cat === c.id).length;
+    return `<button data-id="${c.id}" class="${c.id===current?"active":""}">${c.ka}<span class="count">${n}</span></button>`;
+  }).join("");
+  nav.querySelectorAll("button").forEach(b => b.onclick = () => { current = b.dataset.id; renderTabs(); render(); });
+}
+
+function catName(id){ return (CATEGORIES.find(c => c.id === id) || {}).ka || ""; }
+
+function render(){
+  view = current === "all" ? photos : photos.filter(p => p.cat === current);
+  const grid = document.getElementById("grid"), empty = document.getElementById("empty");
+  grid.innerHTML = view.map((p,i) =>
+    `<figure class="item" data-i="${i}" style="aspect-ratio:${p.w}/${p.h}"><img src="${p.thumb}" width="${p.w}" height="${p.h}" alt="${catName(p.cat)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')"><span class="tag">${catName(p.cat)}</span></figure>`
+  ).join("");
+  grid.querySelectorAll(".item").forEach(el => el.onclick = () => openLb(+el.dataset.i));
+  empty.style.display = view.length ? "none" : "block";
+  empty.innerHTML = "ფოტოები ჯერ არ არის.<br>ატვირთეთ ფოტოები GitHub-ზე <b>photos/edited</b>, <b>photos/original</b> ან <b>photos/bw</b> საქაღალდეში.";
+}
+
+/* lightbox */
+const lb = document.getElementById("lb"), lbImg = document.getElementById("lbImg"), lbInfo = document.getElementById("lbInfo");
+function openLb(i){ idx = i; showLb(); lb.classList.add("open"); document.body.style.overflow = "hidden"; }
+function closeLb(){ lb.classList.remove("open"); document.body.style.overflow = ""; }
+function showLb(){
+  const p = view[idx];
+  lbImg.src = p.thumb;                       // ჯერ სწრაფი ასლი
+  const full = new Image();
+  full.onload = () => { if(view[idx] === p) lbImg.src = p.src; };  // შემდეგ სრული ხარისხი
+  full.src = p.src;
+  lbInfo.textContent = `${catName(p.cat)} · ${idx+1} / ${view.length}`;
+  [1,-1].forEach(d => { const n = view[(idx + d + view.length) % view.length]; if(n) new Image().src = n.src; }); // მეზობლების წინასწარ ჩატვირთვა
+}
+function step(d){ idx = (idx + d + view.length) % view.length; showLb(); }
+lb.querySelector(".close").onclick = closeLb;
+lb.querySelector(".prev").onclick = e => { e.stopPropagation(); step(-1); };
+lb.querySelector(".next").onclick = e => { e.stopPropagation(); step(1); };
+lb.onclick = e => { if(e.target === lb) closeLb(); };
+document.addEventListener("keydown", e => {
+  if(!lb.classList.contains("open")) return;
+  if(e.key === "Escape") closeLb();
+  if(e.key === "ArrowLeft") step(-1);
+  if(e.key === "ArrowRight") step(1);
+});
+let tx = 0;
+lb.addEventListener("touchstart", e => tx = e.touches[0].clientX, {passive:true});
+lb.addEventListener("touchend", e => { const dx = e.changedTouches[0].clientX - tx; if(Math.abs(dx) > 50) step(dx < 0 ? 1 : -1); });
+
+init();
+</script>
+</body>
+</html>
