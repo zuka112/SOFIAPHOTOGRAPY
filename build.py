@@ -51,8 +51,8 @@ for f in ["index.html", "CNAME"]:
         shutil.copy2(ROOT / f, OUT / f)
 
 photos = []
-for cat in CATEGORIES:
-    folder = ROOT / "photos" / cat
+for cat in CATEGORIES:  +  ["root"]:
+    folder = ROOT if cat == "root" else ROOT / "photos" / cat
     if not folder.is_dir():
         continue
     (OUT / "photos" / cat).mkdir(parents=True, exist_ok=True)
